@@ -15,6 +15,5 @@ for i in range(-5, 6):
     points.append(np.array([i, test_func(i)]))
 
 X, spfunc = sl.spline(points, sl.ConstraintType.DERIVATIVE1, m0=0.0147928994, mn=-0.0147928994)
-print(spfunc)
 
 sp.plot(spfunc, (X, -5, 5), backend='matplotlib')
