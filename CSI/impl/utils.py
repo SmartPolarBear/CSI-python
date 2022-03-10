@@ -17,3 +17,7 @@ def create_function(M, x: np.ndarray, y: np.ndarray, h: np.ndarray, N: Final):
         formulas.append((formula, sp.And(X >= x[j], X < x[j + 1])))
 
     return X, sp.Piecewise(*formulas)
+
+
+def create_coefficient_matrix(r_top: np.ndarray, r_center: np.ndarray, r_bottom: np.ndarray):
+    return np.diag(r_bottom, -1) + np.diag(r_center, 0) + np.diag(r_top, 1)

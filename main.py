@@ -14,6 +14,9 @@ points = list()
 for i in range(-5, 6):
     points.append(np.array([i, test_func(i)]))
 
-X, spfunc = sl.spline(points, sl.ConstraintType.DERIVATIVE1, m0=0.0147928994, mn=-0.0147928994)
+# X, spfunc1 = sl.spline(points, sl.ConstraintType.DERIVATIVE1, m0=0.0147928994, mn=-0.0147928994)
+# X, spfunc2 = sl.spline(points, sl.ConstraintType.NATURAL, m0=0.0147928994, mn=-0.0147928994)
+X, spfunc3 = sl.spline(points, sl.ConstraintType.NOT_A_KNOT)
+# X, spfunc4 = sl.spline(points, sl.ConstraintType.PERIODIC, m0=0.0147928994, mn=-0.0147928994)
 
-sp.plot(spfunc, (X, -5, 5), backend='matplotlib')
+sp.plot(spfunc3, (X, -5, 5), backend='matplotlib')
