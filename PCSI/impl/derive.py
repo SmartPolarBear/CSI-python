@@ -5,11 +5,11 @@ from typing import Final
 
 
 def spline_impl_derive1(x: np.ndarray, y: np.ndarray, h: np.ndarray, m0: np.float, mn: np.float):
-    n: Final = x.shape[0]
+    n: Final = x.shape[0] - 1
 
-    alpha: np.ndarray = np.zeros(n - 1)
-    beta: np.ndarray = np.zeros(n - 1)
-    c: np.ndarray = np.zeros(n - 1)
+    alpha: np.ndarray = np.zeros(n + 1)
+    beta: np.ndarray = np.zeros(n + 1)
+    c: np.ndarray = np.zeros(n + 1)
 
     dy = np.diff(y)
 
@@ -37,17 +37,17 @@ def spline_impl_derive1(x: np.ndarray, y: np.ndarray, h: np.ndarray, m0: np.floa
         a[i, 2 + i - 1] = beta[i]
     pass
 
-    m = np.ndarray(np.matrix(a).I * np.transpose(np.matrix(c)))
+    m = np.transpose(np.matrix(a).I.dot(np.transpose(np.matrix(c))))
 
     formulas = []
     X = sp.Symbol('x')
     for j in range(0, n):
-        formula = (m[j + 1] / (6 * h[j])) * (X - x[j]) ** 3 \
-                  - (m[j] / (6 * h[j])) * (X - x[j + 1]) ** 3 \
-                  + (y[j + 1] / h[j] - (h[j] * m[j + 1]) / 6) * (X - x[j]) \
-                  - (y[j] / h[j] - (h[j] * m[j]) / 6) * (X - x[j + 1])
+        formula = (m[0, j + 1] / (6 * h[j])) * (X - x[j]) ** 3 \
+                  - (m[0, j] / (6 * h[j])) * (X - x[j + 1]) ** 3 \
+                  + (y[j + 1] / h[j] - (h[j] * m[0, j + 1]) / 6) * (X - x[j]) \
+                  - (y[j] / h[j] - (h[j] * m[0, j]) / 6) * (X - x[j + 1])
         formula = sp.expand(formula)
-        formula = sp.collect(formula)
+        formula = sp.collect(formula, syms=x)
         formulas.append(formula)
     return formulas
 
