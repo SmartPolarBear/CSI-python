@@ -6,6 +6,7 @@ from CSI.impl.preprocess import preprocess_points
 from CSI.impl.derivative1 import spline_impl_derive1
 from CSI.impl.derivative2 import spline_impl_derive2
 from CSI.impl.periodic import spline_impl_periodic
+from CSI.impl.notaknot import spline_impl_not_a_knot
 
 
 class ConstraintType(Enum):
@@ -27,5 +28,7 @@ def spline(points: list[np.ndarray], constraint_type: ConstraintType, **constrai
         return spline_impl_derive2(x, y, h, M0=0, Mn=0)
     elif constraint_type == ConstraintType.PERIODIC:
         return spline_impl_periodic(x, y, h)
+    elif constraint_type == ConstraintType.NOT_A_KNOT:
+        return spline_impl_not_a_knot(x, y, h)
     else:
         raise RuntimeError("Invalid constraint type {}".format(constraint_type))

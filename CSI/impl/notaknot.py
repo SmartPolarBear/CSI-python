@@ -7,23 +7,21 @@ from CSI.impl.preprocess import preprocess_args
 from CSI.impl.function import create_function
 
 
-def spline_impl_periodic(x: np.ndarray, y: np.ndarray, h: np.ndarray):
+def spline_impl_not_a_knot(x: np.ndarray, y: np.ndarray, h: np.ndarray):
     N: Final = x.shape[0] - 1
 
     alpha, beta, c, dy = preprocess_args(y, h, N)
 
     # by constraint
-    alpha[N] = h[N - 1] / (h[0] + h[N - 1])
-    beta[0] = 1 - alpha[N]
-    c[0] = (6.0 / (h[0] + h[N - 1])) * (dy[0] / h[0] - dy[N - 1] / h[N - 1])
-    c[N] = (6.0 / (h[0] + h[N - 1])) * (dy[0] / h[0] - dy[N - 1] / h[N - 1])
+    alpha[N] = -2
+    beta[0] = -2
+    c[0] = 0
+    c[N] = 0
 
     a = np.zeros((N + 1, N + 1))
 
     a[0, 0] = 2
     a[0, 1] = beta[0]
-    a[0, N - 1] = alpha[N]
-    a[N, 1] = beta[N]
     a[N, N - 1] = alpha[N]
     a[N, N] = 2
     for i in range(1, N):
