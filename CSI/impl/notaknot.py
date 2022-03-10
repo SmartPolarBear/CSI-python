@@ -4,7 +4,7 @@ import sympy as sp
 from typing import Final
 
 from CSI.impl.preprocess import preprocess_args
-from CSI.impl.utils import create_function, create_coefficient_matrix
+from CSI.impl.utils import create_function, create_matrix_A, calculate_coefficients
 
 
 def spline_impl_not_a_knot(x: np.ndarray, y: np.ndarray, h: np.ndarray):
@@ -18,8 +18,8 @@ def spline_impl_not_a_knot(x: np.ndarray, y: np.ndarray, h: np.ndarray):
     c[0] = 0
     c[N] = 0
 
-    a = create_coefficient_matrix(beta[0:N], 2 * np.ones(N + 1), alpha[1:N + 1])
+    a = create_matrix_A(beta[0:N], 2 * np.ones(N + 1), alpha[1:N + 1])
 
     M: Final = np.transpose(np.matrix(a).I.dot(np.transpose(np.matrix(c))))
 
-    return create_function(M, x, y, h, N)
+    return calculate_coefficients(M, y, h, N)
