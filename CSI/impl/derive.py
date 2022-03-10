@@ -17,7 +17,7 @@ def spline_impl_derive1(x: np.ndarray, y: np.ndarray, h: np.ndarray, m0: np.floa
     for j in range(1, N):
         alpha[j] = h[j - 1] / (h[j - 1] + h[j])
         beta[j] = 1 - alpha[j]
-        c[j] = 6 * (1 / (h[j - 1] + h[j])) * ((dy[j] / h[j]) -(dy[j - 1] / h[j - 1]))
+        c[j] = 6 * (1 / (h[j - 1] + h[j])) * ((dy[j] / h[j]) - (dy[j - 1] / h[j - 1]))
 
     # by constraint
     alpha[N] = 1
@@ -49,7 +49,7 @@ def spline_impl_derive1(x: np.ndarray, y: np.ndarray, h: np.ndarray, m0: np.floa
         formula = sp.collect(formula, syms=x)
         formulas.append((formula, sp.And(X >= x[j], X < x[j + 1])))
 
-    return sp.Piecewise(*formulas)
+    return X,sp.Piecewise(*formulas)
 
 
 def spline_impl_derive2(points: list[np.ndarray]):

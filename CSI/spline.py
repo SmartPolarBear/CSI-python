@@ -1,9 +1,9 @@
 import numpy as np
 from enum import Enum
 
-from PCSI.impl.preprocess import preprocess
+from CSI.impl.preprocess import preprocess
 
-from PCSI.impl.derive import spline_impl_derive1
+from CSI.impl.derive import spline_impl_derive1
 
 
 class ConstraintType(Enum):
