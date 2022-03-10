@@ -5,51 +5,51 @@ from typing import Final
 
 
 def spline_impl_derive1(x: np.ndarray, y: np.ndarray, h: np.ndarray, m0: np.float, mn: np.float):
-    n: Final = x.shape[0] - 1
+    N: Final = x.shape[0] - 1
 
-    alpha: np.ndarray = np.zeros(n + 1)
-    beta: np.ndarray = np.zeros(n + 1)
-    c: np.ndarray = np.zeros(n + 1)
+    alpha: np.ndarray = np.zeros(N + 1)
+    beta: np.ndarray = np.zeros(N + 1)
+    c: np.ndarray = np.zeros(N + 1)
 
     dy = np.diff(y)
 
     # by definition
-    for j in range(1, n):
+    for j in range(1, N):
         alpha[j] = h[j - 1] / (h[j - 1] + h[j])
         beta[j] = 1 - alpha[j]
-        c[j] = 6 * (1 / h[j - 1] + h[j]) * (dy[j] / h[j] - dy[j - 1] / h[j - 1])
+        c[j] = 6 * (1 / (h[j - 1] + h[j])) * ((dy[j] / h[j]) -(dy[j - 1] / h[j - 1]))
 
     # by constraint
-    alpha[n] = 1
+    alpha[N] = 1
     beta[0] = 1
     c[0] = (6.0 / h[0]) * (dy[0] / h[0] - m0)
-    c[n] = (6.0 / h[n - 1]) * (dy[n - 1] / h[n - 1] + mn)
+    c[N] = (6.0 / h[N - 1]) * (dy[N - 1] / h[N - 1] + mn)
 
-    a = np.zeros((n + 1, n + 1))
+    a = np.zeros((N + 1, N + 1))
 
     a[0, 0] = 2
     a[0, 1] = beta[0]
-    a[n, n - 1] = alpha[n]
-    a[n, n] = 2
-    for i in range(1, n):
+    a[N, N - 1] = alpha[N]
+    a[N, N] = 2
+    for i in range(1, N):
         a[i, 0 + i - 1] = alpha[i]
         a[i, 1 + i - 1] = 2
         a[i, 2 + i - 1] = beta[i]
-    pass
 
-    m = np.transpose(np.matrix(a).I.dot(np.transpose(np.matrix(c))))
+    M: Final = np.transpose(np.matrix(a).I.dot(np.transpose(np.matrix(c))))
 
     formulas = []
     X = sp.Symbol('x')
-    for j in range(0, n):
-        formula = (m[0, j + 1] / (6 * h[j])) * (X - x[j]) ** 3 \
-                  - (m[0, j] / (6 * h[j])) * (X - x[j + 1]) ** 3 \
-                  + (y[j + 1] / h[j] - (h[j] * m[0, j + 1]) / 6) * (X - x[j]) \
-                  - (y[j] / h[j] - (h[j] * m[0, j]) / 6) * (X - x[j + 1])
+    for j in range(0, N):
+        formula = (M[0, j + 1] / (6 * h[j])) * (X - x[j]) ** 3 \
+                  - (M[0, j] / (6 * h[j])) * (X - x[j + 1]) ** 3 \
+                  + (y[j + 1] / h[j] - (h[j] * M[0, j + 1]) / 6) * (X - x[j]) \
+                  - (y[j] / h[j] - (h[j] * M[0, j]) / 6) * (X - x[j + 1])
         formula = sp.expand(formula)
         formula = sp.collect(formula, syms=x)
-        formulas.append(formula)
-    return formulas
+        formulas.append((formula, sp.And(X >= x[j], X < x[j + 1])))
+
+    return sp.Piecewise(*formulas)
 
 
 def spline_impl_derive2(points: list[np.ndarray]):

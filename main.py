@@ -1,4 +1,8 @@
 import numpy as np
+import sympy as sp
+
+import matplotlib.pyplot as plt
+
 import PCSI.spline as sl
 
 
@@ -12,3 +16,6 @@ for i in range(-5, 6):
 
 ret = sl.spline(points, sl.ConstraintType.DERIVATIVE1, m0=0.0147928994, mn=-0.0147928994)
 print(ret)
+
+X = sp.Symbol('x')
+sp.plot(ret, (X, -5, 5), backend='matplotlib')
