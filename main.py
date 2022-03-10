@@ -10,13 +10,11 @@ def test_func(x):
     return 1 / (1 + x ** 2)
 
 
-points = list()
-for i in range(-5, 6):
-    points.append(np.array([i, test_func(i)]))
+x = [i for i in range(-5, 6)]
+y = [test_func(i) for i in x]
 
-# X, spfunc1 = sl.spline(points, sl.ConstraintType.DERIVATIVE1, m0=0.0147928994, mn=-0.0147928994)
-# X, spfunc2 = sl.spline(points, sl.ConstraintType.NATURAL, m0=0.0147928994, mn=-0.0147928994)
-X, spfunc3 = sl.spline(points, sl.ConstraintType.NOT_A_KNOT)
-# X, spfunc4 = sl.spline(points, sl.ConstraintType.PERIODIC, m0=0.0147928994, mn=-0.0147928994)
+# X, spfunc1 = sl.spline(points, sl.ConstraintType.DERIVATIVE1, m0=1, mn=0.6868)
+# X, spfunc2 = sl.spline(x, y, sl.ConstraintType.DERIVATIVE2, M0=0, Mn=0)
+X, spfunc3 = sl.spline(x, y, sl.ConstraintType.NOT_A_KNOT)
 
 sp.plot(spfunc3, (X, -5, 5), backend='matplotlib')

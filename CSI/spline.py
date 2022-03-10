@@ -1,7 +1,7 @@
+from typing import Iterable
+
 import numpy as np
 from enum import Enum
-
-from CSI.impl.preprocess import preprocess_points
 
 from CSI.impl.derivative1 import spline_impl_derive1
 from CSI.impl.derivative2 import spline_impl_derive2
@@ -17,8 +17,9 @@ class ConstraintType(Enum):
     PERIODIC = 5
 
 
-def spline(points: list[np.ndarray], constraint_type: ConstraintType, **constrains):
-    x, y, h = preprocess_points(points)
+def spline(x: Iterable, y: Iterable, constraint_type: ConstraintType, **constrains):
+    x, y = np.array(x), np.array(y)
+    h = np.diff(x)
 
     if constraint_type == ConstraintType.DERIVATIVE1:
         return spline_impl_derive1(x, y, h, constrains["m0"], constrains["mn"])
