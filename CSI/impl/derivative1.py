@@ -4,6 +4,7 @@ import sympy as sp
 from typing import Final
 
 from CSI.impl.preprocess import preprocess_args
+from CSI.impl.thomas import thomas_solve
 from CSI.impl.utils import create_function, create_matrix_A, calculate_coefficients
 
 
@@ -18,9 +19,10 @@ def spline_impl_derive1(x: np.ndarray, y: np.ndarray, h: np.ndarray, m0: np.floa
     c[0] = (6.0 / h[0]) * (dy[0] / h[0] - m0)
     c[N] = (6.0 / h[N - 1]) * (dy[N - 1] / h[N - 1] + mn)
 
-    a = create_matrix_A(beta[0:N], 2 * np.ones(N + 1), alpha[1:N + 1])
+    # a = create_matrix_A(beta[0:N], 2 * np.ones(N + 1), alpha[1:N + 1])
+    #
+    # M: Final = np.transpose(np.matrix(a).I.dot(np.transpose(np.matrix(c))))
 
-    M: Final = np.transpose(np.matrix(a).I.dot(np.transpose(np.matrix(c))))
+    M: Final = thomas_solve(alpha[1:N + 1], 2 * np.ones(N + 1), beta[0:N], c)
 
     return calculate_coefficients(M, y, h, N)
-

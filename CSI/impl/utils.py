@@ -4,9 +4,8 @@ import sympy as sp
 from typing import Final
 
 
-def calculate_coefficients(M, y: np.ndarray, h: np.ndarray, N: Final):
+def calculate_coefficients(m:np.ndarray, y: np.ndarray, h: np.ndarray, N: Final):
     sixes: Final = np.full(N, 6)
-    m: Final = np.asarray(M.A1)
 
     co1 = m[1:] / (sixes * h)
     co2 = m[:N] / (-sixes * h)

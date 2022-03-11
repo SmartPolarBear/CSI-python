@@ -20,10 +20,9 @@ def spline_impl_periodic(x: np.ndarray, y: np.ndarray, h: np.ndarray):
 
     a = create_matrix_A(beta[0:N], 2 * np.ones(N + 1), alpha[1:N + 1])
 
+    # Cannot use Thomas's algorithm
     a[N, N - 1] = a[0, N - 1] = alpha[N]
     a[0, 1] = a[N, 1] = beta[N]
-
     M: Final = np.transpose(np.matrix(a).I.dot(np.transpose(np.matrix(c))))
 
-    return calculate_coefficients(M, y, h, N)
-
+    return calculate_coefficients(np.asarray(M.A1), y, h, N)
