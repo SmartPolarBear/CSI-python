@@ -3,11 +3,11 @@ from typing import Iterable
 import numpy as np
 from enum import Enum
 
-from CSI.impl.derivative1 import spline_impl_derive1
-from CSI.impl.derivative2 import spline_impl_derive2
-from CSI.impl.periodic import spline_impl_periodic
-from CSI.impl.notaknot import spline_impl_not_a_knot
-from CSI.impl.utils import create_function
+from pyCSI.impl.derivative1 import spline_impl_derive1
+from pyCSI.impl.derivative2 import spline_impl_derive2
+from pyCSI.impl.periodic import spline_impl_periodic
+from pyCSI.impl.notaknot import spline_impl_not_a_knot
+from pyCSI.impl.utils import create_function
 
 
 class ConstraintType(Enum):
@@ -20,7 +20,6 @@ class ConstraintType(Enum):
 
 def spline(x: Iterable, y: Iterable, constraint_type: ConstraintType = ConstraintType.NOT_A_KNOT,
            symbolic_result: bool = True, **constraints):
-
     x, y = np.array(x), np.array(y)
     h = np.diff(x)
 

@@ -3,9 +3,9 @@ import sympy as sp
 
 from typing import Final
 
-from CSI.impl.preprocess import preprocess_args
-from CSI.impl.thomas import thomas_solve
-from CSI.impl.utils import create_function, create_matrix_A, calculate_coefficients
+from pyCSI.impl.preprocess import preprocess_args
+from pyCSI.impl.thomas import thomas_solve
+from pyCSI.impl.utils import create_function, create_matrix_A, calculate_coefficients
 
 
 def spline_impl_not_a_knot(x: np.ndarray, y: np.ndarray, h: np.ndarray):

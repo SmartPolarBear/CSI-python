@@ -3,8 +3,8 @@ import sympy as sp
 
 from typing import Final
 
-from CSI.impl.preprocess import preprocess_args
-from CSI.impl.utils import create_function, create_matrix_A, calculate_coefficients
+from pyCSI.impl.preprocess import preprocess_args
+from pyCSI.impl.utils import create_function, create_matrix_A, calculate_coefficients
 
 
 def spline_impl_periodic(x: np.ndarray, y: np.ndarray, h: np.ndarray):
